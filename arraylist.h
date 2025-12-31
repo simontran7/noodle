@@ -238,9 +238,6 @@
 #define GENERATE_ARRAYLIST_REMOVE_LAST(name, type)                            \
     static inline ArrayListError_##name arraylist_remove_last_##name(         \
         ArrayList_##name *arraylist, type *out) {                             \
-                    if (arraylist->count == 0) {                              \
-            return EMPTY_ARRAYLIST_ERROR_##name;                              \
-        }                                                                     \
         return arraylist_remove_##name(arraylist, arraylist->count - 1, out); \
     }
 
