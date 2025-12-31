@@ -69,35 +69,35 @@
 /*
  * Generates `size_t arraylist_count_<name>(ArrayList_<name> *arraylist)`.
  */
-#define GENERATE_ARRAYLIST_COUNT(name)                                         \
-    static inline size_t arraylist_count_##name(ArrayList_##name *arraylist) { \
-        return arraylist->count;                                               \
+#define GENERATE_ARRAYLIST_COUNT(name)                                               \
+    static inline size_t arraylist_count_##name(const ArrayList_##name *arraylist) { \
+        return arraylist->count;                                                     \
     }
 
 /*
  * Generates `bool arraylist_is_empty_<name>(ArrayList_<name> *arraylist)`.
  */
-#define GENERATE_ARRAYLIST_IS_EMPTY(name)                                       \
-    static inline bool arraylist_is_empty_##name(ArrayList_##name *arraylist) { \
-        return arraylist->count == 0;                                           \
+#define GENERATE_ARRAYLIST_IS_EMPTY(name)                                             \
+    static inline bool arraylist_is_empty_##name(const ArrayList_##name *arraylist) { \
+        return arraylist->count == 0;                                                 \
     }
 
 /*
  * Generates `ArrayListError_<name> arraylist_get_<name>(ArrayList_<name> *arraylist, size_t index, type *out)`.
  */
-#define GENERATE_ARRAYLIST_GET(name, type)                      \
-    static inline ArrayListError_##name arraylist_get_##name(   \
-        ArrayList_##name *arraylist, size_t index, type *out) { \
-        if (arraylist->count == 0) {                            \
-            return EMPTY_ARRAYLIST_ERROR_##name;                \
-        }                                                       \
-        if (index >= arraylist->count) {                        \
-            return INDEX_OUT_OF_BOUNDS_ERROR_##name;            \
-        }                                                       \
-        if (out != NULL) {                                      \
-            *out = arraylist->data[index];                      \
-        }                                                       \
-        return SUCCESS_##name;                                  \
+#define GENERATE_ARRAYLIST_GET(name, type)                            \
+    static inline ArrayListError_##name arraylist_get_##name(         \
+        const ArrayList_##name *arraylist, size_t index, type *out) { \
+        if (arraylist->count == 0) {                                  \
+            return EMPTY_ARRAYLIST_ERROR_##name;                      \
+        }                                                             \
+        if (index >= arraylist->count) {                              \
+            return INDEX_OUT_OF_BOUNDS_ERROR_##name;                  \
+        }                                                             \
+        if (out != NULL) {                                            \
+            *out = arraylist->data[index];                            \
+        }                                                             \
+        return SUCCESS_##name;                                        \
     }
 
 /*
@@ -124,7 +124,7 @@
  */
 #define GENERATE_ARRAYLIST_GET_FIRST(name, type)                    \
     static inline ArrayListError_##name arraylist_get_first_##name( \
-        ArrayList_##name *arraylist, type *out) {                   \
+        const ArrayList_##name *arraylist, type *out) {             \
         if (arraylist->count == 0) {                                \
             return EMPTY_ARRAYLIST_ERROR_##name;                    \
         }                                                           \
@@ -139,7 +139,7 @@
  */
 #define GENERATE_ARRAYLIST_GET_LAST(name, type)                    \
     static inline ArrayListError_##name arraylist_get_last_##name( \
-        ArrayList_##name *arraylist, type *out) {                  \
+        const ArrayList_##name *arraylist, type *out) {            \
         if (arraylist->count == 0) {                               \
             return EMPTY_ARRAYLIST_ERROR_##name;                   \
         }                                                          \
