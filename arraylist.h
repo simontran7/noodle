@@ -164,7 +164,7 @@
         if (new_array == NULL) {                                          \
             return MEMORY_ERROR_##name;                                   \
         }                                                                 \
-        arraylist->data     = new_array;                                  \
+        arraylist->data = new_array;                                      \
         arraylist->capacity = new_capacity;                               \
         return SUCCESS_##name;                                            \
     }
@@ -180,18 +180,14 @@
         }                                                                                                             \
         if (arraylist->count == arraylist->capacity) {                                                                \
             size_t cap = arraylist->capacity;                                                                         \
-            size_t half_of_cap = cap >> 1;                                                                            \
+            /* guarantees progress if `cap` is less than 2 for some reason */                                         \              
+            size_t grow = (cap >> 1) + 1;                                                                             \
             size_t new_capacity;                                                                                      \
-            /* There's a case where `new_capacity == arraylist->capacity` when `arraylist->capacity < 2`, */          \
-            /* as `half_of_cap` will be 0, and therefore `new_capacity = cap + half_of_cap = arraylist->capacity`. */ \
-            /* However, the initial capacity is always 10, so this case will never happen. */                         \
-            if (__builtin_add_overflow(arraylist->capacity, half_of_cap, &new_capacity)) {                            \
-                if (cap == SIZE_MAX) {                                                                                \
+                                                                                                                      \         
+            if (__builtin_add_overflow(arraylist->capacity, grow, &new_capacity)) {                                   \
                     return MEMORY_ERROR_##name;                                                                       \
-                }                                                                                                     \
-                /* guarantee progress */                                                                              \
-                new_capacity = cap + 1;                                                                               \
             }                                                                                                         \
+                                                                                                                      \
             ArrayListError_##name res = arraylist_grow_##name(                                                        \
                 arraylist, new_capacity);                                                                             \
             if (res != SUCCESS_##name) {                                                                              \
